@@ -16,7 +16,7 @@ app.use(express.json());
 
 //create a route that the front-end can request data from.
 //start by requiring the data
-const notes = require('../db/db.json');
+const notes = require('./Develop/db/db.json');
 
 app.get('/', (req, res) => {
   res.send(path.join(__dirname, 'index.html'));
@@ -26,7 +26,6 @@ app.get('/', (req, res) => {
 app.get('/notes', (req, res) => {
   res.send(path.join(__dirname, 'notes.html'));
   //use the send method from the res parameter to send the string
-  }
 });
 
 // GET /api/notes should read the db.json file and return all saved notes as JSON.
