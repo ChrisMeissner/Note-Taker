@@ -1,6 +1,8 @@
 //use these to write the data to db.json
 const fs = require('fs');
 const path = require('path');
+const util = require('util');
+var customId =require('custom-id')
 
 //all you need to run express
 const express = require('express');
@@ -12,25 +14,33 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 //middleware parse incoming JSON data
 app.use(express.json());
+app.use(express.static('public'))
 //*both of these must be used every time you create a server that's looking to accept post data
 
 //create a route that the front-end can request data from.
 //start by requiring the data
-const notes = require('./Develop/db/db.json');
+//const notesDir = require('./db/db.json');
+const readFileAsync = util.promisify(fs.readFile)
+const writeFileAsync = util.promisify(fs.writeFile)
 
 app.get('/', (req, res) => {
-  res.send(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, './public/assets/index.html'));
 });
 
 //add the route (the get method requires 2 arguments (string describing route and callback function))
 app.get('/notes', (req, res) => {
-  res.send(path.join(__dirname, 'notes.html'));
+  res.sendFile(path.join(__dirname, './public/assets/notes.html'));
   //use the send method from the res parameter to send the string
 });
 
 // GET /api/notes should read the db.json file and return all saved notes as JSON.
 app.get('/api/notes', (req, res) => {
-  return res.json(notes);
+  readFileAsync("./db/db.json", "utf8")
+    .then(notes => {
+      const parsedNotes = JSON.parse(notes) || []
+      res.json(parsedNotes)
+    })
+    .catch(err => console.log(err));
 })
 
 // POST /api/notes should receive a new note to save on the request body, 
@@ -41,10 +51,16 @@ app.get('/api/notes', (req, res) => {
 
 app.post('/api/notes', (req, res) => {
   const newNote = req.body;
-  newNote.id = notes.length.toString();
-  notes.push(newNote);
-  fs.writeFileSync('../db/db.json', JSON.stringify)
-  res.json(notes);
+  newNote.id = customId({})
+  readFileAsync("./db/db.json", "utf8")
+    .then(notes => {
+      const parsedNotes = JSON.parse(notes) || []
+      parsedNotes.push(newNote)
+      writeFileAsync("./db/db.json", JSON.stringify(parsedNotes))
+        .then(() => res.json(parsedNotes))
+        .catch(err => console.log(err))
+    })
+    .catch(err => console.log(err))
 });
 
 //DELETE /api/notes/:id should receive a query parameter 
@@ -54,10 +70,18 @@ app.post('/api/notes', (req, res) => {
 //remove the note with the given id property, 
 //and then rewrite the notes to the db.json file.
 
-app.delete('/api/notes', (req, res) => {
-  req.query('/api/notes/:id');
+app.delete('/api/notes/:id', (req, res) => {
+  const {id} = req.params
+  readFileAsync("./db/db.json", "utf8")
+    .then(notes => {
+      const parsedNotes = JSON.parse(notes) || []
+      filteredNotes = parsedNotes.filter(note => id !== note.id)
 
-  res.json(no)
+      writeFileAsync("./db/db.json", JSON.stringify(filteredNotes))
+        .then(() => res.json(filteredNotes))
+        .catch(err => console.log(err))
+    })
+    .catch(err => console.log(err));
 })
 
 
