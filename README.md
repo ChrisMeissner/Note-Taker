@@ -1,12 +1,11 @@
 # Note-Taker
 
-<<<<<<< HEAD
-![GitHub license](https://img.shields.io/badge/license-The Unlicense-blue.svg)
-
-=======
->>>>>>> 04839fc7887aadc2effb6f95c733039b3f837160
 ## Description
 This application allows you to write and store notes.
+
+## Screenshot
+<img width="1280" alt="Screen Shot 2020-10-21 at 9 37 00 PM" src="https://user-images.githubusercontent.com/69017427/96825307-a3b63d00-13e5-11eb-86a5-93ea5a1871dc.png">
+<img width="1280" alt="Screen Shot 2020-10-21 at 9 37 06 PM" src="https://user-images.githubusercontent.com/69017427/96825338-b761a380-13e5-11eb-8d45-140c496136ee.png">
 
 ## Table of Contents
 * [Installation](#installation)
