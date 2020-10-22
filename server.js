@@ -33,7 +33,12 @@ app.get('/api/notes', (req, res) => {
   return res.json(notes);
 })
 
-// POST /api/notes should receive a new note to save on the request body, add it to the db.json file, and then return the new note to the client. You'll need to find a way to give each note a unique id when it's saved (look into npm packages that could do this for you).
+// POST /api/notes should receive a new note to save on the request body, 
+//add it to the db.json file, 
+//and then return the new note to the client. 
+//You'll need to find a way to give each note a unique id 
+//when it's saved (look into npm packages that could do this for you).
+
 app.post('/api/notes', (req, res) => {
   const newNote = req.body;
   newNote.id = notes.length.toString();
@@ -41,6 +46,19 @@ app.post('/api/notes', (req, res) => {
   fs.writeFileSync('../db/db.json', JSON.stringify)
   res.json(notes);
 });
+
+//DELETE /api/notes/:id should receive a query parameter 
+//containing the id of a note to delete. 
+//In order to delete a note, 
+//you'll need to read all notes from the db.json file, 
+//remove the note with the given id property, 
+//and then rewrite the notes to the db.json file.
+
+app.delete('/api/notes', (req, res) => {
+  req.query('/api/notes/:id');
+
+  res.json(no)
+})
 
 
 
